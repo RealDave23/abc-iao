@@ -90,9 +90,11 @@ le immagini restano su GitHub raw.
 
 ## Idee / richieste aperte
 
-- [ ] **Schermata di benvenuto al primo avvio**: chiedere nome ed età, salvarli sul
-      dispositivo e personalizzare i saluti (es. "Ciao Sofia!") ed eventualmente la
-      difficoltà in base all'età. _(richiesto — da implementare)_
+- [x] **Schermata di benvenuto al primo avvio**: chiede nome ed età, li salva sul
+      dispositivo (`localStorage`, chiave `abciao-utente`), personalizza il saluto in
+      home ("Ciao Sofia!") e mostra chi sta giocando nella collezione (con "cambia").
+      Sotto i 6 anni "Conta gli oggetti" e "Ascolta e tocca (123)" restano entro il 5.
+      _(fatto — 2 set 2026, live)_
 - [ ] Collegare il repo GitHub a Vercel per l'auto-deploy.
 - [ ] Eventuale dominio più corto (`abciao.vercel.app` o dominio proprio).
 - [ ] Modalità "ricalca le sillabe" e sillabe come gioco a parte (proposte, non fatte).
