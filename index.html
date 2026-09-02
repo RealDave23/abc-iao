@@ -12,11 +12,11 @@
 <meta property="og:title" content="A-B-C-iao!">
 <meta property="og:description" content="Gioco per imparare lettere, sillabe e numeri. Per la prima elementare.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="/social.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/RealDave23/abc-iao/main/social.jpg">
 <title>A-B-C-iao!</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='3' y='14' width='26' height='26' rx='7' fill='%23FF6A45' transform='rotate(-8 16 27)'/><rect x='34' y='12' width='26' height='26' rx='7' fill='%233B8BFF' transform='rotate(7 47 25)'/><rect x='18' y='34' width='28' height='28' rx='7' fill='%2323B26D' transform='rotate(-3 32 48)'/></svg>">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://raw.githubusercontent.com/RealDave23/abc-iao/main/icon-192.png">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/RealDave23/abc-iao/main/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;700;800&display=swap">
 <style>
@@ -834,6 +834,98 @@
     box-shadow: 0 6px 0 var(--shadow);
   }
   .unlock-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--shadow); }
+
+  /* ---------- intro (primo avvio) ---------- */
+  .intro-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    background: rgba(20, 16, 40, 0.6);
+    display: grid;
+    place-items: center;
+    padding: 18px;
+    overflow-y: auto;
+  }
+  .intro-card {
+    background: var(--card);
+    border: 4px solid var(--yellow);
+    border-radius: 28px;
+    padding: 24px 22px;
+    text-align: center;
+    max-width: 380px;
+    width: 100%;
+    box-shadow: 0 16px 0 var(--shadow);
+    animation: pop 0.4s cubic-bezier(.2, 1.3, .4, 1) both;
+  }
+  .intro-card .hero-logo {
+    font-size: clamp(1.9rem, 8vw, 2.6rem);
+    margin: 0 0 12px;
+    justify-content: center;
+  }
+  .intro-q {
+    font-family: "Fredoka", sans-serif;
+    font-weight: 600;
+    font-size: 1.15rem;
+    margin: 14px 0 8px;
+  }
+  .intro-input {
+    width: 100%;
+    font-family: "Fredoka", sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    text-align: center;
+    padding: 12px;
+    border: 3px solid var(--line);
+    border-radius: 16px;
+    background: var(--paper-2);
+    color: var(--ink);
+  }
+  .intro-input:focus { outline: none; border-color: var(--blue); }
+  .age-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 2px;
+  }
+  .age-btn {
+    border: 3px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    font-family: "Fredoka", sans-serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    cursor: pointer;
+  }
+  .age-btn.on { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .intro-go {
+    margin-top: 18px;
+    border: none;
+    cursor: pointer;
+    font-family: "Fredoka", sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #fff;
+    background: var(--green);
+    border-radius: 16px;
+    padding: 13px 30px;
+    box-shadow: 0 6px 0 var(--shadow);
+  }
+  .intro-go:disabled { opacity: 0.4; cursor: default; }
+  .premi-user { font-weight: 700; color: var(--ink-soft); font-size: 0.9rem; margin-top: 6px; }
+  .linkbtn {
+    border: none;
+    background: none;
+    color: var(--blue);
+    font-weight: 800;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: inherit;
+  }
 </style>
 </head>
 <body>
@@ -857,7 +949,7 @@
       <h1 class="logo hero-logo" aria-label="A-B-C-iao!">
         <span class="cube k1">A</span><span class="hy">-</span><span class="cube k2">B</span><span class="hy">-</span><span class="cube k3">C</span><span class="hy">-</span><span class="tl">iao<span class="bg">!</span></span>
       </h1>
-      <p>Il gioco per imparare le <span class="c1">lettere</span> e i <span class="c2">numeri</span>, un passo alla volta. Pronta per la prima elementare!</p>
+      <p><span id="heroHi"></span>Il gioco per imparare le <span class="c1">lettere</span> e i <span class="c2">numeri</span>, un passo alla volta. Pronta per la prima elementare!</p>
     </div>
     <div class="grid">
       <button class="tile t-coral" data-go="alfabeto">
@@ -1094,6 +1186,7 @@
   <section class="screen s-premi" id="s-premi" hidden>
     <div class="quiz-head"><div class="q-prompt">La mia collezione</div></div>
     <div class="premi-progress" id="premiProgress">Gioca per guadagnare stelle!</div>
+    <div class="premi-user" id="premiUserRow" hidden><span id="premiUser"></span> <button class="linkbtn" id="premiChange" type="button">cambia</button></div>
     <div class="sticker-grid" id="stickerGrid"></div>
     <div class="nav">
       <button class="navbtn big" data-go="home">🏠 Torna a casa</button>
@@ -1108,6 +1201,25 @@
     <div class="unlock-sticker" id="unlockSticker">🦄</div>
     <div class="unlock-name" id="unlockName">Hai sbloccato qualcosa!</div>
     <button class="unlock-btn" id="unlockOk">Evviva!</button>
+  </div>
+</div>
+
+<div class="intro-modal" id="introModal" hidden>
+  <div class="intro-card">
+    <span class="logo hero-logo" aria-label="A-B-C-iao!">
+      <span class="cube k1">A</span><span class="hy">-</span><span class="cube k2">B</span><span class="hy">-</span><span class="cube k3">C</span><span class="hy">-</span><span class="tl">iao<span class="bg">!</span></span>
+    </span>
+    <div class="intro-q">Come ti chiami?</div>
+    <input class="intro-input" id="introName" type="text" maxlength="14" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Il tuo nome">
+    <div class="intro-q">Quanti anni hai?</div>
+    <div class="age-row">
+      <button type="button" class="age-btn" data-age="4">4</button>
+      <button type="button" class="age-btn" data-age="5">5</button>
+      <button type="button" class="age-btn" data-age="6">6</button>
+      <button type="button" class="age-btn" data-age="7">7</button>
+      <button type="button" class="age-btn" data-age="8">8</button>
+    </div>
+    <button class="intro-go" id="introGo" disabled>Cominciamo! 🎈</button>
   </div>
 </div>
 
@@ -1178,6 +1290,11 @@
   try { stars = parseInt(localStorage.getItem("lettere-numeri-stelle"), 10) || 0; } catch (e) { stars = 0; }
   var muted = false;
   try { muted = localStorage.getItem("lettere-numeri-muto") === "1"; } catch (e) {}
+  var user = null;
+  try { user = JSON.parse(localStorage.getItem("abciao-utente") || "null"); } catch (e) { user = null; }
+  function nameOf() { return (user && user.name) ? user.name : ""; }
+  function youngKid() { return !!(user && user.age && user.age <= 5); }
+  function contaMax() { return youngKid() ? 5 : 10; }
 
   var $ = function (id) { return document.getElementById(id); };
   var starsEl = $("starsCount");
@@ -1391,6 +1508,49 @@
   starsBtn.addEventListener("click", function () { show("premi"); });
   $("unlockOk").addEventListener("click", function () { $("unlockModal").hidden = true; });
 
+  /* ---------------- intro (nome + età) ---------------- */
+  var introAge = null;
+  function applyUser() {
+    var hi = $("heroHi");
+    if (hi) hi.textContent = nameOf() ? ("Ciao " + nameOf() + "! ") : "";
+    var row = $("premiUserRow");
+    if (row) {
+      row.hidden = !user;
+      $("premiUser").textContent = user ? ("Sta giocando " + user.name + " (" + user.age + " anni)") : "";
+    }
+  }
+  function syncIntro() {
+    document.querySelectorAll("[data-age]").forEach(function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-age"), 10) === introAge);
+    });
+    $("introGo").disabled = !($("introName").value.trim() && introAge);
+  }
+  function openIntro() {
+    $("introName").value = user ? user.name : "";
+    introAge = user ? user.age : null;
+    $("introModal").hidden = false;
+    syncIntro();
+    window.setTimeout(function () { try { $("introName").focus(); } catch (e) {} }, 250);
+  }
+  $("introName").addEventListener("input", syncIntro);
+  document.querySelectorAll("[data-age]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      introAge = parseInt(b.getAttribute("data-age"), 10);
+      syncIntro();
+    });
+  });
+  $("introGo").addEventListener("click", function () {
+    var nm = $("introName").value.trim().slice(0, 14);
+    nm = nm.charAt(0).toUpperCase() + nm.slice(1);
+    user = { name: nm, age: introAge };
+    try { localStorage.setItem("abciao-utente", JSON.stringify(user)); } catch (e) {}
+    $("introModal").hidden = true;
+    applyUser();
+    renderHomeReward();
+    speak("Ciao " + nm + "! Cominciamo a giocare!", 300);
+  });
+  $("premiChange").addEventListener("click", openIntro);
+
   /* ---------------- router ---------------- */
   var SCREENS = ["home", "alfabeto", "sillabe", "numeri", "trova", "conta", "ricalca", "ascolta", "scrivi", "premi"];
   var homeBtn = $("homeBtn");
@@ -1399,8 +1559,8 @@
     homeBtn.hidden = (name === "home");
     if ("speechSynthesis" in window) speechSynthesis.cancel();
     window.scrollTo(0, 0);
-    if (name === "home") renderHomeReward();
-    if (name === "premi") renderPremi();
+    if (name === "home") { renderHomeReward(); applyUser(); }
+    if (name === "premi") { renderPremi(); applyUser(); }
     if (name === "alfabeto") renderAlfa();
     if (name === "numeri") renderNum();
     if (name === "trova") newTrova();
@@ -1541,7 +1701,8 @@
   /* ---------------- conta gli oggetti ---------------- */
   var contaAnswer = 0;
   function newConta() {
-    contaAnswer = 1 + Math.floor(Math.random() * 10);
+    var cm = contaMax();
+    contaAnswer = 1 + Math.floor(Math.random() * cm);
     var emo = sample(OBJ_EMOJI);
     var set = $("contaSet");
     set.innerHTML = "";
@@ -1553,7 +1714,7 @@
     }
     var opts = [contaAnswer];
     while (opts.length < 3) {
-      var c = 1 + Math.floor(Math.random() * 10);
+      var c = 1 + Math.floor(Math.random() * cm);
       if (opts.indexOf(c) === -1) opts.push(c);
     }
     shuffle(opts);
@@ -1887,7 +2048,7 @@
   function newAscolta() {
     var pool = ascMode === "abc"
       ? ALFABETO.map(function (x) { return x.l; })
-      : ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+      : (youngKid() ? ["1", "2", "3", "4", "5"] : ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]);
     ascAnswer = sample(pool);
     var opts = [ascAnswer];
     while (opts.length < 4) {
@@ -2396,7 +2557,9 @@
   }
 
   /* ---------------- start ---------------- */
+  applyUser();
   show("home");
+  if (!user) openIntro();
 })();
 </script>
 
