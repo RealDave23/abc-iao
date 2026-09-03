@@ -1847,6 +1847,8 @@
   var TRACE_LETTERS = ALFABETO.map(function (x) { return x.l; });
   var TRACE_DIGITS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   var BK = 480;
+  var TRACE_BRUSH = 20;          // spessore del "pennello" col dito (metà di prima, per tracciare più precisi)
+  var TRACE_WIN_COMPLETE = 0.42; // quanta parte della lettera va coperta per completare
   var traceMode = "abc", traceIdx = 0, traceReady = false, traceStarted = false;
   var guideCv, drawCv, gctx, dctx, maskData = null, maskTotal = 0;
   var drawing = false, lastX = 0, lastY = 0, hintCount = 0;
@@ -1991,7 +1993,7 @@
 
   function inkSeg(x1, y1, x2, y2) {
     dctx.strokeStyle = traceMode === "abc" ? cssVar("--coral") : cssVar("--blue");
-    dctx.lineWidth = 40;
+    dctx.lineWidth = TRACE_BRUSH;
     dctx.lineCap = "round";
     dctx.lineJoin = "round";
     dctx.beginPath();
@@ -2016,10 +2018,10 @@
     }
     var completeness = inside / maskTotal;
     var accuracy = painted ? inside / painted : 0;
-    setMeter(completeness);
-    if (completeness >= 0.66 && accuracy >= 0.4) {
+    setMeter(completeness / TRACE_WIN_COMPLETE);
+    if (completeness >= TRACE_WIN_COMPLETE && accuracy >= 0.4) {
       traceWin();
-    } else if (completeness > 0.25) {
+    } else if (completeness > 0.12) {
       hintCount++;
       if (hintCount % 2 === 1) speak("Bravissima, continua a seguire la riga!");
     }
