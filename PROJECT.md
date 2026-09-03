@@ -16,6 +16,7 @@ Un solo file (`index.html`), nessuna build, funziona offline dopo il primo caric
 | Repo GitHub | https://github.com/RealDave23/abc-iao |
 | Pannello Vercel | https://vercel.com/real-dave3d/abc-iao |
 | Claude Artifact (copia) | https://claude.ai/code/artifact/853b8813-108d-44d1-abd4-3911ca35d75e |
+| **App Android (APK)** | https://github.com/RealDave23/abc-iao/releases/latest/download/abc-iao.apk |
 
 Progetto Vercel `abc-iao` (team RealDave3d). Il repo GitHub **non è ancora collegato**
 a Vercel: per l'auto-deploy on-push va installata la Vercel GitHub App
@@ -74,6 +75,24 @@ gli errori incoraggiano e basta. Tema chiaro e scuro. Rispetta "riduci animazion
   dispositivo/browser, non si sincronizzano.
 - Sorgente di lavoro: `lettere-numeri.html` (formato Claude Artifact). La versione
   Vercel si genera avvolgendolo in un documento HTML completo.
+
+---
+
+## App Android (APK)
+
+La home mostra il pulsante **"Installa l'app su Android"** (solo su Android, solo se
+non è già aperta come app) che scarica l'APK dall'ultima GitHub Release.
+
+- L'APK è una **TWA** (Trusted Web Activity, creata con Bubblewrap): un guscio Android
+  che apre a schermo pieno `https://abc-iao.vercel.app`. Si aggiorna da solo col sito.
+- `.well-known/assetlinks.json` (in questo repo, servito da Vercel) contiene il
+  fingerprint della chiave di firma: è ciò che fa partire la TWA senza barra indirizzi.
+- Progetto di build sul PC: `~/abc-iao-android` (non nel repo). Package
+  `com.realdave3d.abciao`. La **chiave di firma** (`android.keystore`) va conservata:
+  senza la stessa firma gli aggiornamenti non si installano sopra la versione esistente.
+- **Nuova versione APK**: alzare `appVersionCode` in `~/abc-iao-android/twa-manifest.json`,
+  `bubblewrap build`, poi nuova GitHub Release con l'asset chiamato `abc-iao.apk`
+  (il pulsante punta sempre a `releases/latest/download/abc-iao.apk`).
 
 ---
 
