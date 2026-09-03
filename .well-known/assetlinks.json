@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.realdave3d.abciao",
+      "sha256_cert_fingerprints": [
+        "0C:10:3C:5B:BD:92:A9:28:62:EA:07:07:BE:C0:31:5A:54:55:21:F6:3D:90:58:D3:50:3A:96:36:E3:22:C9:70"
+      ]
+    }
+  }
+]

@@ -691,6 +691,27 @@
   }
   .s-home .footnote { margin-top: 18px; }
 
+  .install-cta {
+    display: none;
+    margin: 14px auto 0;
+    max-width: 520px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 18px;
+    background: var(--card);
+    border: 2px solid var(--line);
+    box-shadow: 0 6px 0 var(--shadow);
+    color: var(--ink);
+    font-weight: 800;
+    font-size: 0.95rem;
+    text-decoration: none;
+  }
+  .install-cta .emoji { font-size: 1.5rem; line-height: 1; }
+  .install-cta small { display: block; color: var(--ink-soft); font-weight: 700; font-size: 0.76rem; margin-top: 2px; }
+  body.can-install .install-cta { display: flex; }
+
   :focus-visible {
     outline: 4px solid var(--ring);
     outline-offset: 3px;
@@ -1001,6 +1022,10 @@
       </span>
     </button>
     <p class="footnote">Tocca le lettere e i numeri grandi per sentirli. 🔊</p>
+    <a class="install-cta" id="installApp" href="https://github.com/RealDave23/abc-iao/releases/latest/download/abc-iao.apk">
+      <span class="emoji">📲</span>
+      <span>Installa l'app su Android<small>Scarica il file e aprilo per aggiungere A-B-C-iao! al telefono</small></span>
+    </a>
   </section>
 
   <!-- ALFABETO -->
@@ -2560,6 +2585,16 @@
   applyUser();
   show("home");
   if (!user) openIntro();
+})();
+</script>
+
+<script>
+(function () {
+  var isAndroid = /Android/i.test(navigator.userAgent);
+  var standalone = window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true ||
+    document.referrer.indexOf('android-app://') === 0;
+  if (isAndroid && !standalone) document.body.classList.add('can-install');
 })();
 </script>
 
